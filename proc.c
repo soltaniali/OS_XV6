@@ -532,3 +532,38 @@ procdump(void)
     cprintf("\n");
   }
 }
+int  
+ps()
+{
+  sti();
+  struct proc *p;
+  struct proc *process[100];
+  int counter = 0 ;
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if((p->state == RUNNING) || (p->state == RUNNABLE))
+    {
+      process[counter] = p;
+      counter++;
+    }
+  }
+  for (int i = 0; i < counter; i++)
+  {
+    for (int j = 0; j < counter - 1; j++)
+    {
+      if (process[j]->sz > process[j + 1] -> sz)
+      {
+        struct proc *temp = process[j];
+        process[j] = process[j+1];
+        process[j + 1] = temp;
+      }
+    }
+    
+  }
+  for (int i = 0; i < counter; i++)
+  {
+    cprintf("%d : %s\n" , i , process[i]->name);
+  }
+  release(&ptable.lock);
+  return 22;
+}
