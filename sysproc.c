@@ -7,6 +7,13 @@
 #include "mmu.h"
 #include "proc.h"
 
+struct proc_info{
+    int pid;
+    char name[16];
+    int size;
+    int state;
+};
+
 int
 sys_fork(void)
 {
@@ -89,8 +96,7 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
-int
-sys_ps (void)
+int sys_proc_dump (void)
 {
   return ps();
 }

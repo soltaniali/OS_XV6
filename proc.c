@@ -532,18 +532,17 @@ procdump(void)
     cprintf("\n");
   }
 }
-int  
-ps()
+int ps()
 {
-  sti();
   struct proc *p;
-  struct proc *process[100];
+  struct proc *process[NPROC];
   int counter = 0 ;
-  acquire(&ptable.lock);
+
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-    if((p->state == RUNNING) || (p->state == RUNNABLE))
+    if(p->state == RUNNABLE || p->state == RUNNING)
     {
       process[counter] = p;
+
       counter++;
     }
   }
@@ -558,12 +557,14 @@ ps()
         process[j + 1] = temp;
       }
     }
-    
   }
-  for (int i = 0; i < counter; i++)
+  cprintf("PID        SIZE        NAME\n----------------------------\n");
+
+  for(int i = 0; i < counter; i++)
   {
-    cprintf("%d : %s\n" , i , process[i]->name);
+    cprintf("%d          %d       %s\n", process[i]->pid, process[i]->sz, process[i]->name);
   }
-  release(&ptable.lock);
+  cprintf("----------------------------\n");
+
   return 22;
 }
