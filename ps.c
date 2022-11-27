@@ -4,16 +4,22 @@
 #include "fcntl.h"
 
 int main (int argc , char * argv[]){
-    fork();
-    fork();
-    int *a = malloc(13000);
-    int *b = malloc(33000);
-    a[0] = 1;
+    int pid1 = fork();
+    int pid2 = fork();
 
-    a = malloc(20000);
+    if(pid1 == 0){
+        int *mem = (int *) malloc(57000);
+        mem[0] = 1;
+        while(1);
+    }
+    if(pid2 == 0){
+        int *mem = (int *) malloc(80000);
+        for(int i = 0; i < 1000; i++){
+            mem[i] = i;
+        }
+        while(1);
+    }
 
-    a[1] = 4 * 5;
-    b[2] = 4 * 5;
     proc_dump();
 
     exit();

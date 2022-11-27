@@ -12,6 +12,13 @@ struct {
   struct proc proc[NPROC];
 } ptable;
 
+struct proc_info{
+    uint size;
+    int pid;
+    char name[16];
+    int state;
+};
+
 static struct proc *initproc;
 
 int nextpid = 1;
@@ -532,16 +539,24 @@ procdump(void)
     cprintf("\n");
   }
 }
+
 int ps()
 {
   struct proc *p;
-  struct proc *process[NPROC];
+  struct proc_info process[NPROC];
   int counter = 0 ;
 
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if(p->state == RUNNABLE || p->state == RUNNING)
     {
-      process[counter] = p;
+      process[counter].pid = p->pid;
+      process[counter].size = p->sz;
+      process[counter].state = p->state;
+
+      for(int i = 0; i < 16; i++)
+      {
+        process[counter].name[i] = p->name[i];
+      }
 
       counter++;
     }
@@ -550,19 +565,19 @@ int ps()
   {
     for (int j = 0; j < counter - 1; j++)
     {
-      if (process[j]->sz > process[j + 1] -> sz)
+      if (process[j].size > process[j + 1].size)
       {
-        struct proc *temp = process[j];
+        struct proc_info temp = process[j];
         process[j] = process[j+1];
         process[j + 1] = temp;
       }
     }
   }
-  cprintf("PID        SIZE        NAME\n----------------------------\n");
+  cprintf("PID-----SIZE-----NAME\n----------------------------\n");
 
   for(int i = 0; i < counter; i++)
   {
-    cprintf("%d          %d       %s\n", process[i]->pid, process[i]->sz, process[i]->name);
+    cprintf("%d-----%d-----%s\n", process[i].pid, process[i].size, process[i].name);
   }
   cprintf("----------------------------\n");
 
