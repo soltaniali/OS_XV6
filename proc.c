@@ -573,13 +573,12 @@ int ps()
       }
     }
   }
-  cprintf("PID-----SIZE-----NAME\n----------------------------\n");
 
   for(int i = 0; i < counter; i++)
   {
-    cprintf("%d-----%d-----%s\n", process[i].pid, process[i].size, process[i].name);
+    cprintf("PID:\t%d  SIZE:\t%d  NAME:\t%s\n", process[i].pid, process[i].size, process[i].name);
   }
-  cprintf("----------------------------\n");
+  cprintf("-----------------------------\n");
 
   return 22;
 }
