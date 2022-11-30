@@ -4,22 +4,19 @@
 #include "fcntl.h"
 
 int main (int argc , char * argv[]){
-    int pid1 = fork();
-    int pid2 = fork();
+    int proc_count = 0;
+    int *a = (int *)malloc(sizeof(int));
 
-    if(pid1 == 0){
-        int *mem = (int *) malloc(7000*sizeof(int));
-        mem[0] = 1;
-        while(1);
-    }
-    if(pid2 == 0){
-        int *mem = (int *) malloc(80000*sizeof(int));
-        for(int i = 0; i < 1000; i++){
-            mem[i] = i;
+    proc_count = atoi(argv[1]);
+    for (int i = 0; i < proc_count; i++){
+        if (fork() == 0){
+            a = (int *)malloc((499400*(i+1)));
+            for (int j = 0; j < 1000; j++){
+                a[j] = j;
+            }
+            while(1);
         }
-        while(1);
     }
-
     proc_dump();
 
     exit();

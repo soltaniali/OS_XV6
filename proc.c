@@ -576,7 +576,13 @@ int ps()
 
   for(int i = 0; i < counter; i++)
   {
-    cprintf("PID:\t%d  SIZE:\t%d  NAME:\t%s\n", process[i].pid, process[i].size, process[i].name);
+    if(process[i].pid / 10 == 0)
+      cprintf("PID:   %d", process[i].pid);
+    else
+      cprintf("PID:  %d", process[i].pid);
+    
+    cprintf("  Size: %d\n", process[i].size);
+
   }
   cprintf("-----------------------------\n");
 
